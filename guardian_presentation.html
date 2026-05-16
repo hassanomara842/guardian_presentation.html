@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardian AI - Premium Presentation</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00f3ff;
+            --primary-glow: rgba(0, 243, 255, 0.4);
+            --secondary: #bc13fe;
+            --danger: #ff0055;
+            --dark: #050508;
+            --glass-bg: rgba(10, 15, 30, 0.4);
+            --glass-border: rgba(0, 243, 255, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            overflow: hidden; /* لمنع التمرير */
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        /* الشبكة الخلفية المتحركة (Cyber Grid) */
+        .cyber-grid {
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(var(--glass-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); }
+        }
+
+        /* تأثير الإضاءة التفاعلية مع الماوس */
+        .mouse-glow {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle 600px at var(--mouse-x) var(--mouse-y), rgba(0, 243, 255, 0.08), transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+            transition: background 0.1s ease;
+        }
+
+        /* خط المسح (Scanner Line) */
+        .scanner-line {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+            opacity: 0.5;
+            animation: scan 6s linear infinite;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        /* الإنجليزية بخط تقني */
+        .eng { font-family: 'Orbitron', sans-serif; letter-spacing: 1.5px; direction: ltr; display: inline-block;}
+
+        /* حاوية الشرائح */
+        .presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* الشريحة الأساسية (Glass Card) */
+        .slide {
+            position: absolute;
+            width: 90%;
+            max-width: 1400px;
+            height: 85vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 50px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.9) translateY(40px) rotateX(-10deg);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* تنسيق شريط التمرير السيبراني للشرائح الممتلئة */
+        .slide::-webkit-scrollbar { width: 6px; }
+        .slide::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .slide::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.5); border-radius: 10px; }
+        .slide::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0) rotateX(0);
+        }
+
+        /* العناوين داخل الشريحة */
+        h2.slide-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 15px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        h2.slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            width: 50%;
+        }
+
+        h2.slide-title i { color: var(--primary); font-size: 2.2rem; text-shadow: 0 0 15px var(--primary-glow); }
+
+        /* المحتوى الداخلي للشرائح */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            flex-grow: 1;
+        }
+
+        .card-inner {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-inner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .card-inner:hover::before { left: 100%; }
+        .card-inner:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+
+        .card-inner h3 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        ul.cyber-list { list-style: none; }
+        ul.cyber-list li {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-right: 25px;
+            position: relative;
+            line-height: 1.5;
+        }
+        ul.cyber-list li::before {
+            content: '▹';
+            position: absolute;
+            right: 0; top: -2px;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+        ul.cyber-list li strong { color: var(--text-main); }
+
+        /* الشريحة الأولى (الغلاف) مخصصة */
+        .slide-title-wrapper {
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .shield-icon {
+            font-size: 6rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px var(--primary));
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 20px var(--primary)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 50px var(--primary)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--primary)); }
+        }
+
+        .main-title {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--text-main);
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .sub-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .presenter-box {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--primary);
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* أدوات التحكم (Navigation) */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+            background: rgba(0,0,0,0.6);
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .controls button {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .controls button:hover {
+            color: #fff;
+            transform: scale(1.2);
+            text-shadow: 0 0 15px var(--primary);
+        }
+
+        .dots { display: flex; gap: 10px; }
+        .dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dot.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            transform: scale(1.3);
+        }
+
+        /* تأثير الأرقام الكبيرة (شريحة الدقة) */
+        .big-number-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .big-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8rem;
+            font-weight: 900;
+            background: linear-gradient(180deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--primary-glow));
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        /* تأثير الـ Pipeline لشريحة الـ NLP */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            position: relative;
+        }
+        .pipeline::before {
+            content: ''; position: absolute; top: 50%; left: 10%; right: 10%;
+            height: 2px; background: rgba(255,255,255,0.2); z-index: 1;
+            border-style: dashed; border-width: 2px; border-color: var(--primary);
+        }
+        .pipe-node {
+            background: var(--dark);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 120px; height: 120px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 2;
+            box-shadow: 0 0 20px var(--primary-glow);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .pipe-node i { font-size: 2rem; margin-bottom: 10px; color: #fff; }
+
+        /* تخصيص المشكلة بالأحمر */
+        .card-inner.danger {
+            border-color: rgba(255, 0, 85, 0.3);
+        }
+        .card-inner.danger h3 { color: var(--danger); }
+        .card-inner.danger:hover {
+            border-color: var(--danger);
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.2);
+        }
+        .card-inner.danger ul.cyber-list li::before { color: var(--danger); }
+
+    </style>
+</head>
+<body>
+
+    <!-- مؤثرات الخلفية -->
+    <div class="cyber-grid"></div>
+    <div class="mouse-glow" id="mouseGlow"></div>
+    <div class="scanner-line"></div>
+
+    <!-- حاوية العرض -->
+    <div class="presentation-container">
+
+        <!-- شريحة 1: الغلاف -->
+        <div class="slide active" id="slide-0">
+            <div class="slide-title-wrapper">
+                <i class="fa-solid fa-shield-halved shield-icon"></i>
+                <h1 class="main-title eng">GUARDIAN</h1>
+                <p class="sub-title eng">SMS Spam Detection using Machine Learning & Big Data</p>
+                <h2 style="font-size: 2rem; color: var(--text-main); margin-bottom: 50px;">اكتشاف الرسائل الاحتيالية والمزعجة بذكاء</h2>
+                <div class="presenter-box">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                    <span>مقدم المشروع: <strong>[By_Team]</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريحة 2: المشكلة والهدف -->
+        <div class="slide" id="slide-1">
+            <h2 class="slide-title"><i class="fa-solid fa-crosshairs"></i> المشكلة والهدف <span class="eng">(Problem & Objective)</span></h2>
+            <div class="content-grid">
+                <div class="card-inner danger">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> المشكلة <span class="eng">(The Problem)</span></h3>
+                    <ul class="cyber-list">
+                        <li>زيادة مخيفة في رسائل النصب <strong class="eng">(Phishing)</strong> والرسائل الإعلانية المزعجة <strong class="eng">(Spam)</strong>.</li>
+                        <li>استغلال البيانات الشخصية وسرقة الحسابات البنكية للمستخدمين.</li>
+                        <li><strong>صعوبة الفرز اليدوي:</strong> استحالة معالجة ملايين الرسائل يومياً بالطرق التقليدية وفي وقت قياسي.</li>
+                    </ul>
+                </div>
+                <div class="card-inner">
+                    <h3><i class="fa-solid fa-bullseye"></i> الهدف <span class="eng">(The Objective)</span></h3>
+                    <ul class="cyber-list">
+                        <li>بناء <strong>نظام هجين ذكي</strong> <span class="eng">(Hybrid System)</span> يحمي المستخدم.</li>
+                        <li>استخدام <strong class="eng">Machine Learning</strong> لاكتشاف الأنماط الخبيثة بدقة.</li>
+                        <li>دمج تقنيات <strong class="eng">Big Data (Apache Spark)</strong> لضمان السرعة الفائقة ومعالجة تدفقات البيانات الضخمة لحظياً.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريحة 3: البيانات -->
+        <div class="slide" id="slide-2">
+            <h2 class="slide-title"><i class="fa-solid fa-database"></i> مجموعة البيانات <span class="eng">(Dataset & EDA)</span></h2>
+            <div class="content-grid">
+                <div class="card-inner">
+                    <h3><i class="fa-solid fa-magnifying-glass-chart"></i> استكشاف البيانات</h3>
+                    <ul class="cyber-list">
+                        <li><strong>المصدر:</strong> <span class="eng">SMS Spam Collection (UCI)</span> - تحتوي على أكثر من 5500 رسالة.</li>
+                        <li><strong>عدم التوازن <span class="eng">(Class Imbalance)</span>:</strong> الرسائل السليمة <span class="eng">(Ham)</span> أضعاف الرسائل المزعجة.</li>
+                        <li><strong>تحليل الطول <span class="eng">(Length)</span>:</strong> خوارزمياتنا أثبتت أن رسائل الـ <span class="eng">Spam</span> أطول وتحتوي على كلمات أكثر بكثير من العادية.</li>
+                    </ul>
+                </div>
+                <div class="card-inner" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 243, 255, 0.05);">
+                    <i class="fa-solid fa-cloud-word" style="font-size: 4rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3 class="eng">Word Cloud Insights</h3>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+                        <span style="background: var(--danger); padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 1.5rem;">FREE</span>
+                        <span style="background: var(--secondary); padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 1.3rem;">WIN</span>
+                        <span style="background: #ffaa00; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 1.4rem;">CLAIM</span>
+                        <span style="background: var(--primary); color: #000; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 1.2rem;">URGENT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريحة 4: NLP -->
+        <div class="slide" id="slide-3">
+            <h2 class="slide-title"><i class="fa-solid fa-language"></i> معالجة اللغات الطبيعية <span class="eng">(NLP)</span></h2>
+            <div class="card-inner" style="margin-bottom: 30px;">
+                <ul class="cyber-list">
+                    <li><strong>تنظيف النصوص:</strong> توحيد الحروف <span class="eng">(Lowercase)</span>، وإزالة علامات الترقيم.</li>
+                    <li><strong>تصفية الكلمات:</strong> التخلص من الكلمات الشائعة <span class="eng">(Stop Words)</span> باستخدام مكتبة <span class="eng">NLTK</span> لأنها لا تضيف قيمة للتصنيف.</li>
+                    <li><strong>التحويل الرياضي <span class="eng">(TF-IDF)</span>:</strong> تحويل الكلمات لمصفوفات أرقام تعطي وزناً أعلى للكلمات النادرة والمميزة لرسائل النصب.</li>
+                </ul>
+            </div>
+            
+            <h3 style="text-align: center; color: var(--primary); margin-top: 20px;" class="eng">Data Transformation Pipeline</h3>
+            <div class="pipeline">
+                <div class="pipe-node">
+                    <i class="fa-solid fa-comment-sms"></i>
+                    <span class="eng">Raw Text</span>
+                </div>
+                <div class="pipe-node">
+                    <i class="fa-solid fa-broom"></i>
+                    <span class="eng">Cleaned</span>
+                </div>
+                <div class="pipe-node">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span class="eng">TF-IDF</span>
+                </div>
+                <div class="pipe-node" style="border-color: var(--secondary); box-shadow: 0 0 20px var(--secondary);">
+                    <i class="fa-solid fa-microchip"></i>
+                    <span class="eng">Vectors</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريحة 5: Big Data -->
+        <div class="slide" id="slide-4">
+            <h2 class="slide-title"><i class="fa-solid fa-network-wired"></i> معمارية البيانات الضخمة <span class="eng">(Big Data)</span></h2>
+            <div class="content-grid">
+                <div class="card-inner" style="display: flex; flex-direction: column; justify-content: center; align-items: center; border-color: #E25A1C;">
+                    <i class="fa-solid fa-bolt" style="font-size: 6rem; color: #E25A1C; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(226, 90, 28, 0.5));"></i>
+                    <h3 class="eng" style="color: #E25A1C; font-size: 2.5rem;">Apache Spark</h3>
+                    <p class="eng" style="color: var(--text-muted);">Distributed Processing Power</p>
+                </div>
+                <div class="card-inner">
+                    <h3>لماذا <span class="eng">Spark</span> وليس <span class="eng">Pandas</span>؟</h3>
+                    <ul class="cyber-list">
+                        <li><strong>قدرة التحمل:</strong> مكتبات البايثون العادية تنهار عند معالجة ملايين الرسائل لأنها تستخدم جهازاً واحداً.</li>
+                        <li><strong>التوزيع <span class="eng">(Distributed)</span>:</strong> <span class="eng">Spark</span> يستخدم <span class="eng">RDDs</span> ويوزع المعالجة على مجموعة من الأجهزة <span class="eng">(Cluster)</span>.</li>
+                        <li><strong>التطبيق الفعلي:</strong> استخدمنا <span class="eng">PySpark.SQL</span> لتحليل البيانات، و <span class="eng">PySpark MLlib</span> لتدريب نموذج الذكاء الاصطناعي بسرعات مضاعفة.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريحة 6: ML Model -->
+        <div class="slide" id="slide-5">
+            <h2 class="slide-title"><i class="fa-solid fa-brain"></i> نموذج تعلم الآلة <span class="eng">(ML Model)</span></h2>
+            <div class="content-grid">
+                <div class="card-inner">
+                    <h3><i class="fa-solid fa-gears"></i> تفاصيل الخوارزمية</h3>
+                    <ul class="cyber-list">
+                        <li><strong>الخوارزمية:</strong> <span class="eng">Logistic Regression</span>. تم اختيارها لسرعتها وكفاءتها العالية في مهام التصنيف الثنائي للبيانات النصية الكبيرة.</li>
+                        <li><strong>هندسة الخصائص <span class="eng">(Feature Engineering)</span>:</strong> لم نعتمد على الكلمات فقط، بل أضفنا (طول الرسالة) كمتغير جديد رفع دقة الموديل بشكل ملحوظ.</li>
+                        <li><strong>النتائج <span class="eng">(Precision)</span>:</strong> نسبة الخطأ شبه معدومة؛ لا يتم تصنيف أي رسالة مهمة (بنكية أو شخصية) على أنها سبام بالخطأ.</li>
+                    </ul>
+                </div>
+                <div class="card-inner big-number-container">
+                    <div class="big-number">+97%</div>
+                    <h3 class="eng" style="color: var(--text-main); font-size: 2rem;">Accuracy achieved using</h3>
+                    <h3 class="eng" style="color: var(--primary); font-size: 2.5rem; text-shadow: 0 0 10px var(--primary-glow);">PySpark MLlib</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريحة 7: Dashboard -->
+        <div class="slide" id="slide-6">
+            <h2 class="slide-title"><i class="fa-solid fa-desktop"></i> واجهة النظام التفاعلية <span class="eng">(Dashboard)</span></h2>
+            <div class="card-inner" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                <ul class="cyber-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <li>
+                        <h3 style="margin-bottom: 5px; color: #fff;"><i class="fa-brands fa-python"></i> التقنية <span class="eng">(Tech Stack)</span></h3>
+                        بناء واجهة مستخدم متطورة باستخدام <strong class="eng">Streamlit</strong> بتصميم زجاجي أمني <span class="eng">(Cyber-Security Glassmorphism)</span> يعكس احترافية النظام.
+                    </li>
+                    <li>
+                        <h3 style="margin-bottom: 5px; color: var(--danger);"><i class="fa-solid fa-radar"></i> ماسح التهديدات <span class="eng">(Threat Scanner)</span></h3>
+                        أداة فحص حية؛ يقوم المستخدم بكتابة أو لصق الرسالة، ليقوم النظام بتحليلها لحظياً <span class="eng">(Real-time Inference)</span> وإصدار تنبيه أمني.
+                    </li>
+                    <li>
+                        <h3 style="margin-bottom: 5px; color: var(--secondary);"><i class="fa-solid fa-chart-pie"></i> التحليلات المرئية <span class="eng">(Visual Analytics)</span></h3>
+                        شاشة مخصصة لمديري الأنظمة تعرض رسوماً بيانية وإحصائيات تفاعلية عن طبيعة الرسائل المكتشفة.
+                    </li>
+                    <li>
+                        <h3 style="margin-bottom: 5px; color: var(--primary);"><i class="fa-solid fa-server"></i> وحدة البيانات الضخمة <span class="eng">(Big Data Module)</span></h3>
+                        شاشة تعرض كفاءة المعالجة باستخدام <span class="eng">PySpark</span> لتؤكد قوة المعمارية في التعامل مع الضغط.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- أزرار التحكم -->
+    <div class="controls">
+        <button id="prevBtn" title="السابق"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="dots" id="dotsContainer">
+            <!-- سيتم توليد النقاط برمجياً -->
+        </div>
+        <button id="nextBtn" title="التالي"><i class="fa-solid fa-chevron-left"></i></button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+            let currentSlide = 0;
+
+            // توليد نقاط التنقل
+            const dotsContainer = document.getElementById('dotsContainer');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            }
+            const dots = document.querySelectorAll('.dot');
+
+            function updateUI() {
+                // تحديث الشرائح
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active');
+                    if (index === currentSlide) {
+                        slide.classList.add('active');
+                    }
+                });
+                
+                // تحديث النقاط
+                dots.forEach((dot, index) => {
+                    dot.classList.remove('active');
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    }
+                });
+            }
+
+            function goToSlide(index) {
+                if (index >= 0 && index < totalSlides) {
+                    currentSlide = index;
+                    updateUI();
+                }
+            }
+
+            // أزرار التالي والسابق (معكوسة لأن الاتجاه RTL)
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+            });
+
+            document.getElementById('prevBtn').addEventListener('click', () => {
+                if (currentSlide > 0) goToSlide(currentSlide - 1);
+            });
+
+            // دعم لوحة المفاتيح
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1); // السهم اليسار يروح للشريحة التالية في العربي
+                } else if (e.key === 'ArrowRight') {
+                    if (currentSlide > 0) goToSlide(currentSlide - 1);
+                }
+            });
+
+            // تأثير الماوس الديناميكي
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX;
+                const y = e.clientY;
+                document.documentElement.style.setProperty('--mouse-x', `${x}px`);
+                document.documentElement.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>
+```
